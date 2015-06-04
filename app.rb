@@ -2,39 +2,35 @@ require 'sinatra'
 require 'stripe'
 
 class InterPlayApp < Sinatra::Base
-  public_key = ENV['PUBLIC_KEY']
-  secret_key = ENV['SECRET_KEY']
-
-  Stripe.api_key = secret_key
+  Stripe.api_key = ENV['STRIPE_PRIVATE_KEY']
 
   get '/' do
+    @public_key = ENV['STRIPE_PUBLIC_KEY']
     erb :index
   end
 
   post '/charge' do
-    # Amount in cents
-    @amount = params[:amount] * 100
-
-    puts "Stripe token: #{params[:stripeToken]}"
+    @amount = params[:amount]
 
     customer = Stripe::Customer.create(
         :email => 'customer@example.com',
         :card  => params[:stripeToken]
     )
 
-    puts "Customer created."
-
     charge = Stripe::Charge.create(
-        :amount      => @amount,
+        :amount      => to_stripe(@amount),
         :description => 'Sinatra Charge',
         :currency    => 'usd',
-        :card => params[:stripeToken]
-        #:customer    => customer.id
+        :customer    => customer.id
     )
 
-    puts "Charged."
-
     erb :charge
+  end
+
+  # This method copnverts a normal decoimal dollar amount to an
+  # integer value representing # of cents for the charge
+  def to_stripe(value)
+    (value.to_f * 100).to_i
   end
 end
 
