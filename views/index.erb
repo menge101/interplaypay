@@ -5,5 +5,10 @@
     </label>
   </article>
 
-  <script src="https://checkout.stripe.com/v3/checkout.js" class="stripe-button" data-key="<%= settings.public_key %>"></script>
+  <script
+    src="https://checkout.stripe.com/v3/checkout.js" class="stripe-button"
+    data-key="<%= PUBLIC_KEY %>"
+    data-name="Interplay"
+    data-description="Daycare payment">
+  </script>
 </form>
