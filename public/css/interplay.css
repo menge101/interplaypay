@@ -1,0 +1,11 @@
+.panel-default > .panel-heading {
+    background-color: #0958A7;
+}
+
+.panel-default > .panel-footer {
+    background-color: #0958A7;
+}
+
+.panel-body {
+    background-color: #F1FEE4;
+}

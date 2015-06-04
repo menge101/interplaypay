@@ -6,35 +6,38 @@ class InterPlayApp < Sinatra::Base
 
   get '/' do
     @public_key = ENV['STRIPE_PUBLIC_KEY']
+    @months = month_options
+    puts @months.inspect
     erb :index
   end
 
   post '/charge' do
-    @amount = params[:amount]
+    @amount = amount_normalize(params[:amount])
     @parent = params[:parent]
     @child = params[:child]
     @month = params[:month]
 
-    puts "Starting"
+    params.each do |k,v|
+      puts "Key: #{k} has value: #{v}"
+    end
 
+    if(@month.include?('('))
+      @month = @month.split(' ')[0]
+    end
 
     customer = Stripe::Customer.create(
-        :email => 'customer@example.com',
+        :email => params[:stripeEmail],
         :card  => params[:stripeToken],
         :description => "#{@parent} is the parent of #{@child}"
     )
 
-    puts "Customer created"
-
     charge = Stripe::Charge.create(
         :amount      => to_stripe(@amount),
-        :description => 'Web payment',
+        :description => 'Interplay Web payment',
         :currency    => 'usd',
         :customer    => customer.id,
         :description => "#{@parent} has paid #{@amount} for #{@child}'s care in the month of #{@month}"
     )
-
-    "charge created."
 
     erb :charge
   end
@@ -48,6 +51,22 @@ class InterPlayApp < Sinatra::Base
   # This method takes the params array and creates a hash on customer specific data
   def customer_meta_data(p)
     { name: p[:parent], child_name: p[:child] }
+  end
+
+  def month_options
+    months = %w(January February March April May June July August September October November December)
+    current = months[(Time.now.month - 1)]
+    while(current.downcase != months[0].downcase)
+      months.rotate!
+    end
+    months[0] += ' (current)'
+    months[1] += ' (next month)'
+    months
+  end
+
+  def amount_normalize(amount)
+    (((amount.to_f * 1000).to_i + 1) / 1000.0).to_s.slice!(-1)
+    amount
   end
 end
 

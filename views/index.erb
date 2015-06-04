@@ -1,22 +1,42 @@
-<form action="/charge" method="post">
-  <article>
-    <label class="charge_info">
-      Child's Name: <input type="text" name="child"></br>
-      Your Name: <input type="text" name="parent"></br>
-      Month: <input type="text" name="month"></br>
-    </label>
-    <label class="amount">
-      <span class="currencyinput">Amount: $<input type="text" name="amount"></span>
-    </label>
-  </article>
+<div class="panel panel-default" xmlns="http://www.w3.org/1999/html"/>
+  <div class="panel-heading"></div>
+  <div class="panel-body">
+    <form action="/charge" method="post" xmlns="http://www.w3.org/1999/html">
+       <div class="form-group">
+         <label for="childName">Child's Name</label>
+         <input type="text" class="form-control" id="childName" name="child" placeholder="Enter your child's name">
+       </div>
+       <div class="form-group">
+         <label for="parentName">Your Name</label>
+         <input type="text" name="parent" class="form-control" id="parentName" placeholder="Enter your name">
+       </div>
+       <div class="form-group">
+         <label for="paymentMonth">Month</label>
+         <select class="form-control" name="month">
+           <% @months.each do |month| %>
+           <%= "<option>#{month}</option>/n" %>
+           <% end %>
+         </select>
+       </div>
+       <div class="form-group">
+         <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+         <div class="input-group">
+           <div class="input-group-addon">$</div>
+           <input type="text" class="form-control" id="exampleInputAmount" name="amount" placeholder="Amount">
+         </div>
+       </div>
+     <script
+       src="https://checkout.stripe.com/v3/checkout.js" class="stripe-button"
+       data-key="<%= @public_key %>"
+       data-name="Interplay"
+       data-description="Daycare payment"
+       data-image="/images/interplay_square.png">
+      </script>
+    </form>
+  </div>
+  <div class="panel-footer"></div>
+</div>
 
-  <script
-    src="https://checkout.stripe.com/v3/checkout.js" class="stripe-button"
-    data-key="<%= @public_key %>"
-    data-name="Interplay"
-    data-description="Daycare payment"
-    data-image="/images/interplay_square.png">
-  </script>
-</form>
+
 
 

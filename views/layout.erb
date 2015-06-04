@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style type="text/css"><!--
-  BODY {font-family:"Arial"; font-size:10;margin:0px;padding:0px;text-align:center;min-width:738px;}
-  P {font-family:"Arial"; font-size:10;}
-  FORM {margin:0;padding:0;}
-  #centerwrapper {text-align:left;width:738px;margin-left:auto;margin-right:auto;}
-  --></style>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="/css/interplay.css" type="text/css" media="screen" title="no title" charset="utf-8">
 </head>
-<body bgcolor="#71B532" text="#666666" link="#0000FF" vlink="#800080" topmargin="0" leftmargin="0">
-<a href="http://www.interplaychildcare.org"><img src="/images/interplay_logo.jpg"></a>
-<%= yield %>
+<style type="text/css">
+  body { background-color: #71B532 }
+</style>
+
+<div class="container">
+  <div class="center-block">
+    <a href="http://www.interplaychildcare.org"><img src="/images/interplay_logo.jpg" class="img-responsive" alt="Interplay Childcare center"></a>
+  </div>
+  <%= yield %>
+</div>
 </body>
 </html>
