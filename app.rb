@@ -11,26 +11,43 @@ class InterPlayApp < Sinatra::Base
 
   post '/charge' do
     @amount = params[:amount]
+    @parent = params[:parent]
+    @child = params[:child]
+    @month = params[:month]
+
+    puts "Starting"
+
 
     customer = Stripe::Customer.create(
         :email => 'customer@example.com',
-        :card  => params[:stripeToken]
+        :card  => params[:stripeToken],
+        :description => "#{@parent} is the parent of #{@child}"
     )
+
+    puts "Customer created"
 
     charge = Stripe::Charge.create(
         :amount      => to_stripe(@amount),
-        :description => 'Sinatra Charge',
+        :description => 'Web payment',
         :currency    => 'usd',
-        :customer    => customer.id
+        :customer    => customer.id,
+        :description => "#{@parent} has paid #{@amount} for #{@child}'s care in the month of #{@month}"
     )
+
+    "charge created."
 
     erb :charge
   end
 
-  # This method copnverts a normal decoimal dollar amount to an
+  # This method converts a normal decimal dollar amount to an
   # integer value representing # of cents for the charge
   def to_stripe(value)
     (value.to_f * 100).to_i
+  end
+
+  # This method takes the params array and creates a hash on customer specific data
+  def customer_meta_data(p)
+    { name: p[:parent], child_name: p[:child] }
   end
 end
 

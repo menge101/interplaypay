@@ -1,7 +1,12 @@
 <form action="/charge" method="post">
   <article>
+    <label class="charge_info">
+      Child's Name: <input type="text" name="child"></br>
+      Your Name: <input type="text" name="parent"></br>
+      Month: <input type="text" name="month"></br>
+    </label>
     <label class="amount">
-      <span class="currencyinput">$<input type="text" name="amount"></span>
+      <span class="currencyinput">Amount: $<input type="text" name="amount"></span>
     </label>
   </article>
 
@@ -9,6 +14,9 @@
     src="https://checkout.stripe.com/v3/checkout.js" class="stripe-button"
     data-key="<%= @public_key %>"
     data-name="Interplay"
-    data-description="Daycare payment">
+    data-description="Daycare payment"
+    data-image="/images/interplay_square.png">
   </script>
 </form>
+
+
