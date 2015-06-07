@@ -3,5 +3,13 @@ ruby '2.2.0'
 
 gem 'sinatra'
 gem 'stripe'
-gem 'heroku'
-gem 'rack-ssl'
+
+group :production do
+  gem 'rack-ssl'
+end
+
+group :test do
+  gem 'rspec'
+  gem 'rack-test'
+end
+

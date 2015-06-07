@@ -7,7 +7,6 @@ class InterPlayApp < Sinatra::Base
   get '/' do
     @public_key = ENV['STRIPE_PUBLIC_KEY']
     @months = month_options
-    puts @months.inspect
     erb :index
   end
 
@@ -17,11 +16,7 @@ class InterPlayApp < Sinatra::Base
     @child = params[:child]
     @month = params[:month]
 
-    params.each do |k,v|
-      puts "Key: #{k} has value: #{v}"
-    end
-
-    if(@month.include?('('))
+    if @month.include?('(')
       @month = @month.split(' ')[0]
     end
 
@@ -33,10 +28,9 @@ class InterPlayApp < Sinatra::Base
 
     charge = Stripe::Charge.create(
         :amount      => to_stripe(@amount),
-        :description => 'Interplay Web payment',
         :currency    => 'usd',
         :customer    => customer.id,
-        :description => "#{@parent} has paid #{@amount} for #{@child}'s care in the month of #{@month}"
+        :description => "Interplay Web payment: #{@parent} has paid #{@amount} for #{@child}'s care in the month of #{@month}"
     )
 
     erb :charge
@@ -54,10 +48,11 @@ class InterPlayApp < Sinatra::Base
   end
 
   def month_options
-    months = %w(January February March April May June July August September October November December)
-    current = months[(Time.now.month - 1)]
-    while(current.downcase != months[0].downcase)
-      months.rotate!
+    current_date = Date.today
+    months = []
+    12.times do
+      months << current_date.strftime('%B')
+      current_date = (current_date >> 1)
     end
     months[0] += ' (current)'
     months[1] += ' (next month)'

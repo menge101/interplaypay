@@ -1,3 +1,7 @@
+body {
+    background-color: #71B532
+}
+
 .panel-default > .panel-heading {
     background-color: #0958A7;
 }
@@ -9,3 +13,4 @@
 .panel-body {
     background-color: #F1FEE4;
 }
+
